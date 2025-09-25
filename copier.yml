@@ -81,5 +81,27 @@ _skip_if_exists:
   - "*.py"
 
 _tasks:
-  - command: "echo 'Template generated successfully! Run make install to get started.'"
+  - command: |
+      echo "Setting up your MLOps project..."
+      if ! command -v uv >/dev/null 2>&1; then
+        echo "Installing uv package manager..."
+        if command -v pipx >/dev/null 2>&1; then
+          pipx install uv
+        elif command -v pip >/dev/null 2>&1; then
+          pip install --user pipx
+          export PATH="$HOME/.local/bin:$PATH"
+          pipx install uv
+        else
+          echo "Installing uv via curl..."
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+        fi
+      fi
+    when: true
+  - command: |
+      echo "Installing project dependencies..."
+      export PATH="$HOME/.local/bin:$PATH"
+      uv sync --all-groups
+    when: true
+  - command: "echo 'Template generated successfully! Run make verify to test your setup.'"
     when: true

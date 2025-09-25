@@ -7,12 +7,8 @@ A new MLOps project created from the template.
 ### Prerequisites
 
 - Python {{ python_version }}+
-- `uv` (Python package manager)
 
-To install `uv`:
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+> **Note**: This project uses `uv` for dependency management. If not already installed, `uv` was automatically installed when you generated this project from the template.
 {% if include_feature_engineering -%}
 - `graphviz` (for visualizing Hamilton pipelines if you enabled feature engineering)
 
@@ -34,10 +30,12 @@ git clone <your-repo-url>
 cd <your-repo-name>
 ```
 
-2) **Install dependencies**
-```bash
-make install
-```
+2) **Dependencies are already installed** 🎉
+
+   Dependencies were automatically installed when the template was generated. If you need to reinstall them:
+   ```bash
+   make install
+   ```
 
 3) **Verify the setup**
 ```bash

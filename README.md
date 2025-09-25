@@ -14,6 +14,8 @@ Install Copier:
 pip install copier
 ```
 
+**Note**: Generated projects use `uv` for dependency management, which is automatically installed during project generation.
+
 ### Using the Template
 
 1. **Generate a new project** from this template:
@@ -37,10 +39,10 @@ pip install copier
    - **include_monitoring**: Include model monitoring pipeline with drift detection
    - **api_framework**: Choose API framework (fastapi or none)
 
-3. **Navigate to your new project** and install dependencies:
+3. **Navigate to your new project** - dependencies are already installed!
    ```bash
    cd /path/to/new/project
-   make install
+   make verify  # Test that everything works
    ```
 
 ### Template Features
