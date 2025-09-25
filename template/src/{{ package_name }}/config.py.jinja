@@ -1,10 +1,8 @@
-{% if include_sample_code == "starter" -%}
 # TEMPLATE PLACEHOLDER:
 # Centralized Pydantic configuration with derived paths.
 # TODO(template): extend with your own module-specific configs.
 
 import os
-from typing import Any
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -22,13 +20,11 @@ class DataCollectionConfig(BaseModel):
     raw_data_file: str = "raw_data.csv"
 
 
-{% if include_feature_engineering -%}
 class FeatureEngineeringConfig(BaseModel):
     """Configuration for the feature engineering pipeline."""
     features_output_file: str = "features.parquet"
 
 
-{% endif -%}
 class ModelingConfig(BaseModel):
     """Configuration for the modeling pipeline."""
     target_column: str = "target"
@@ -54,47 +50,22 @@ class AppConfig(BaseModel):
 
     # Module-specific configs
     data_collection: DataCollectionConfig = Field(default_factory=DataCollectionConfig)
-{%- if include_feature_engineering %}
     feature_engineering: FeatureEngineeringConfig = Field(default_factory=FeatureEngineeringConfig)
-{%- endif %}
     modeling: ModelingConfig = Field(default_factory=ModelingConfig)
 
     # Derived paths
     raw_data_path: str = ""
-{%- if include_feature_engineering %}
     features_path: str = ""
-{%- endif %}
     model_path: str = ""
 
     @model_validator(mode='after')
     def construct_paths(self) -> 'AppConfig':
         """Construct full paths after initial validation."""
         self.raw_data_path = _join_path(self.base_data_path, self.data_collection.raw_data_file)
-{%- if include_feature_engineering %}
         self.features_path = _join_path(self.base_data_path, self.feature_engineering.features_output_file)
-{%- endif %}
         self.model_path = _join_path(self.base_artifact_path, self.modeling.model_output_name)
         return self
 
 
 # Global singleton
 config = AppConfig()
-{% else -%}
-"""
-Configuration module for {{ package_name }}.
-
-This module provides centralized configuration management using Pydantic.
-TODO(template): Implement your configuration classes and settings here.
-"""
-
-from pydantic import BaseModel
-
-
-class AppConfig(BaseModel):
-    """The main application configuration class."""
-    pass
-
-
-# Global configuration instance
-config = AppConfig()
-{% endif -%}
