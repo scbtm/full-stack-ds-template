@@ -29,49 +29,7 @@ org_name:
   help: "Organization/Weights & Biases entity name"
   default: "your-org"
 
-include_sample_code:
-  type: str
-  help: "Include sample code in the template?"
-  choices:
-    - minimal
-    - starter
-  default: starter
-
-include_feature_engineering:
-  type: bool
-  help: "Include Hamilton-based feature engineering pipeline?"
-  default: true
-
-ci_provider:
-  type: str
-  help: "CI provider to use"
-  choices:
-    - github_actions
-    - none
-  default: github_actions
-
-cloud_provider:
-  type: str
-  help: "Cloud provider for deployment"
-  choices:
-    - gcp
-    - none
-  default: gcp
-
-include_monitoring:
-  type: bool
-  help: "Include model monitoring pipeline with drift detection?"
-  default: true
-
-api_framework:
-  type: str
-  help: "API framework for inference service"
-  choices:
-    - fastapi
-    - none
-  default: fastapi
-
-# Computed variables
+# Fixed variables - all features included by default
 python_version:
   type: str
   default: "3.12"

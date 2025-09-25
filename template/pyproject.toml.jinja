@@ -5,11 +5,9 @@ description = "A new MLOps project created from the template."
 readme = "README.md"
 requires-python = ">={{ python_version }}"
 dependencies = [
-{% if api_framework == "fastapi" -%}
     "fastapi>=0.110.0",
     "gunicorn>=21.2.0",
     "uvicorn[standard]>=0.27.1",
-{% endif -%}
     "gcsfs>=2023.12.2",
     "metaflow==2.11.5",
     "pandas>=2.2.0",
@@ -17,9 +15,7 @@ dependencies = [
     "pyarrow>=15.0.0",
     "pydantic>=2.6.1",
     "scikit-learn>=1.4.0",
-{% if include_feature_engineering -%}
     "sf-hamilton[visualization]>=1.40.0",
-{% endif -%}
     "wandb>=0.16.3",
 ]
 
@@ -35,25 +31,17 @@ dev = [
     "pytest-cov>=4.1.0",    # Coverage reporting
     "coverage[toml]>=7.4.1", # Coverage configuration
     "pre-commit>=3.6.0",    # Git hooks
-{% if api_framework == "fastapi" -%}
     "httpx>=0.26.0",        # HTTP client for API testing
-{% endif -%}
     "ipython>=8.21.0",      # Interactive Python
     "pip-audit>=2.7.3",     # Security auditing
 ]
 
 [project.scripts]
-{% if api_framework == "fastapi" -%}
 api = "{{ package_name }}.inference.main:run"
-{% endif -%}
 collect-data = "{{ package_name }}.data_collection.flow:main"
-{% if include_feature_engineering -%}
 build-features = "{{ package_name }}.feature_engineering.flow:main"
-{% endif -%}
 train-model = "{{ package_name }}.modeling.flow:main"
-{% if include_monitoring -%}
 monitor-model = "{{ package_name }}.monitoring.flow:main"
-{% endif -%}
 
 [tool.pytest.ini_options]
 markers = [

@@ -2,7 +2,7 @@
 # Makefile with common developer workflows.
 # TODO(template): customize targets for your team.
 
-.PHONY: install format lint typecheck test security-check verify pre-commit ci-verify collect-data{% if include_feature_engineering %} build-features{% endif %} train-model{% if include_monitoring %} monitor-model{% endif %}
+.PHONY: install format lint typecheck test security-check verify pre-commit ci-verify collect-data build-features train-model monitor-model
 
 # --- Installation ---
 install:
@@ -34,15 +34,11 @@ ci-verify: format lint typecheck test security-check
 collect-data:
 	uv run collect-data run
 
-{% if include_feature_engineering -%}
 build-features:
 	uv run build-features run
 
-{% endif -%}
 train-model:
 	uv run train-model run
 
-{% if include_monitoring -%}
 monitor-model:
 	uv run monitor-model run
-{% endif -%}

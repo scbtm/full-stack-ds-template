@@ -1,4 +1,3 @@
-{% if include_sample_code == "starter" -%}
 from {{ package_name }}.config import AppConfig
 
 
@@ -7,22 +6,11 @@ def test_app_config_path_construction():
     cfg = AppConfig(base_data_path="/tmp/data", base_artifact_path="/tmp/artifacts")
 
     assert cfg.raw_data_path == "/tmp/data/raw_data.csv"
-{%- if include_feature_engineering %}
     assert cfg.features_path == "/tmp/data/features.parquet"
-{%- endif %}
     assert cfg.model_path == "/tmp/artifacts/model.pkl"
-{% else -%}
-"""
-Unit tests for {{ package_name }} configuration.
-
-TODO(template): Add more comprehensive configuration tests.
-"""
-
-from {{ package_name }}.config import AppConfig
 
 
 def test_app_config_creation():
     """Test that AppConfig can be created."""
     config = AppConfig()
     assert config is not None
-{% endif -%}

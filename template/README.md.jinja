@@ -9,8 +9,9 @@ A new MLOps project created from the template.
 - Python {{ python_version }}+
 
 > **Note**: This project uses `uv` for dependency management. If not already installed, `uv` was automatically installed when you generated this project from the template.
-{% if include_feature_engineering -%}
-- `graphviz` (for visualizing Hamilton pipelines if you enabled feature engineering)
+
+**Additional Prerequisites:**
+- `graphviz` (for visualizing Hamilton feature engineering pipelines)
 
 To install `graphviz` on Debian/Ubuntu:
 ```bash
@@ -20,7 +21,6 @@ On macOS (using Homebrew):
 ```bash
 brew install graphviz
 ```
-{% endif -%}
 
 ### Installation
 
