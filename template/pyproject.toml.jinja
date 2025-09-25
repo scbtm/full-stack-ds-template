@@ -28,20 +28,18 @@ requires = ["uv_build>=0.8.13,<0.9.0"]
 build-backend = "uv_build"
 
 [tool.dependency-groups]
-test = [
-    "coverage[toml]>=7.4.1",
-{% if api_framework == "fastapi" -%}
-    "httpx>=0.26.0",
-{% endif -%}
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-]
-lint = ["ruff>=0.2.1"]
-typing = ["pyright>=1.1.348"]
 dev = [
-    "ipython>=8.21.0",
-    "pre-commit>=3.6.0",
-    "pip-audit>=2.7.3",
+    "ruff>=0.2.1",           # Linting and formatting
+    "pyright>=1.1.348",     # Type checking
+    "pytest>=8.0.0",        # Testing framework
+    "pytest-cov>=4.1.0",    # Coverage reporting
+    "coverage[toml]>=7.4.1", # Coverage configuration
+    "pre-commit>=3.6.0",    # Git hooks
+{% if api_framework == "fastapi" -%}
+    "httpx>=0.26.0",        # HTTP client for API testing
+{% endif -%}
+    "ipython>=8.21.0",      # Interactive Python
+    "pip-audit>=2.7.3",     # Security auditing
 ]
 
 [project.scripts]
@@ -61,10 +59,3 @@ monitor-model = "{{ package_name }}.monitoring.flow:main"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
 ]
-
-[tool.ruff]
-line-length = 88
-indent-width = 4
-
-[tool.ruff.lint]
-select = ["E4", "E7", "E9", "F", "I"]
