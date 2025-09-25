@@ -1,0 +1,67 @@
+{% if include_sample_code == "starter" -%}
+# TEMPLATE PLACEHOLDER:
+# Minimal Metaflow pipeline for data collection.
+
+from metaflow import FlowSpec, step
+
+
+class DataCollectionFlow(FlowSpec):
+    """A simple Metaflow pipeline for data collection."""
+
+    @step
+    def start(self):
+        print("Starting data collection flow...")
+        self.next(self.load_data)
+
+    @step
+    def load_data(self):
+        print("Loading data...")
+        # TODO(template): Add your data loading logic here
+        self.next(self.end)
+
+    @step
+    def end(self):
+        print("Data collection flow finished.")
+
+
+def main():
+    DataCollectionFlow()  # Triggers Metaflow CLI
+
+
+if __name__ == "__main__":
+    main()
+{% else -%}
+"""
+Data collection Metaflow pipeline for {{ package_name }}.
+
+This module contains the Metaflow pipeline for data collection.
+TODO(template): Implement your data collection pipeline here.
+"""
+
+from metaflow import FlowSpec, step
+
+
+class DataCollectionFlow(FlowSpec):
+    """Metaflow pipeline for data collection."""
+
+    @step
+    def start(self):
+        """Start the data collection flow."""
+        print("Starting data collection flow...")
+        # TODO(template): Implement your flow logic here
+        self.next(self.end)
+
+    @step
+    def end(self):
+        """End the data collection flow."""
+        print("Data collection flow finished.")
+
+
+def main():
+    """Entry point for the data collection flow."""
+    DataCollectionFlow()
+
+
+if __name__ == "__main__":
+    main()
+{% endif -%}

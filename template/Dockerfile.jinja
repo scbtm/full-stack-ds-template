@@ -1,0 +1,25 @@
+# TEMPLATE PLACEHOLDER:
+# This Dockerfile builds a unified image for API + pipelines.
+# TODO(template): adjust base image or add system deps as needed.
+
+# Stage 1: Builder
+FROM python:{{ python_version }}-slim as builder
+WORKDIR /app
+RUN pip install uv
+COPY pyproject.toml uv.lock* ./
+RUN uv sync --all-features
+
+# Stage 2: Final Production Image
+FROM python:{{ python_version }}-slim as final
+WORKDIR /app
+COPY --from=builder /app/.venv /.venv
+ENV PATH="/app/.venv/bin:$PATH"
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY src/ ./src/
+ENTRYPOINT ["docker-entrypoint.sh"]
+{% if api_framework == "fastapi" -%}
+CMD ["api"]
+{% else -%}
+CMD ["collect-data"]
+{% endif -%}

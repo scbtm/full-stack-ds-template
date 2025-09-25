@@ -1,0 +1,100 @@
+{% if include_sample_code == "starter" -%}
+# TEMPLATE PLACEHOLDER:
+# Centralized Pydantic configuration with derived paths.
+# TODO(template): extend with your own module-specific configs.
+
+import os
+from typing import Any
+from pydantic import BaseModel, Field, model_validator
+
+
+def _join_path(base: str | None, filename: str) -> str:
+    """URL-aware path joining that works for local paths and cloud URLs."""
+    if not base:
+        return filename
+    if base.startswith(("gs://", "s3://", "http://", "https://")):
+        return f"{base.rstrip('/')}/{filename}"
+    return os.path.join(base, filename)
+
+
+class DataCollectionConfig(BaseModel):
+    """Configuration for the data collection pipeline."""
+    raw_data_file: str = "raw_data.csv"
+
+
+{% if include_feature_engineering -%}
+class FeatureEngineeringConfig(BaseModel):
+    """Configuration for the feature engineering pipeline."""
+    features_output_file: str = "features.parquet"
+
+
+{% endif -%}
+class ModelingConfig(BaseModel):
+    """Configuration for the modeling pipeline."""
+    target_column: str = "target"
+    test_size: float = 0.2
+    random_state: int = 42
+    model_output_name: str = "model.pkl"
+
+
+class AppConfig(BaseModel):
+    """The main, centralized application configuration."""
+
+    # Base paths (can be local or GCS)
+    base_data_path: str = Field(default_factory=lambda: os.getenv("BASE_DATA_PATH", "data"))
+    base_artifact_path: str = Field(default_factory=lambda: os.getenv("ARTIFACT_PATH", "artifacts"))
+
+    # W&B Configuration
+    wandb_project: str = Field(default_factory=lambda: os.getenv("WANDB_PROJECT", "{{ project_slug }}"))
+    wandb_entity: str = Field(default_factory=lambda: os.getenv("WANDB_ENTITY", "{{ org_name }}"))
+    wandb_key: str | None = Field(default_factory=lambda: os.getenv("WANDB_KEY"))
+
+    # Model Name
+    model_name: str = Field(default_factory=lambda: os.getenv("MODEL_NAME", "{{ package_name }}-model"))
+
+    # Module-specific configs
+    data_collection: DataCollectionConfig = Field(default_factory=DataCollectionConfig)
+{%- if include_feature_engineering %}
+    feature_engineering: FeatureEngineeringConfig = Field(default_factory=FeatureEngineeringConfig)
+{%- endif %}
+    modeling: ModelingConfig = Field(default_factory=ModelingConfig)
+
+    # Derived paths
+    raw_data_path: str = ""
+{%- if include_feature_engineering %}
+    features_path: str = ""
+{%- endif %}
+    model_path: str = ""
+
+    @model_validator(mode='after')
+    def construct_paths(self) -> 'AppConfig':
+        """Construct full paths after initial validation."""
+        self.raw_data_path = _join_path(self.base_data_path, self.data_collection.raw_data_file)
+{%- if include_feature_engineering %}
+        self.features_path = _join_path(self.base_data_path, self.feature_engineering.features_output_file)
+{%- endif %}
+        self.model_path = _join_path(self.base_artifact_path, self.modeling.model_output_name)
+        return self
+
+
+# Global singleton
+config = AppConfig()
+{% else -%}
+"""
+Configuration module for {{ package_name }}.
+
+This module provides centralized configuration management using Pydantic.
+TODO(template): Implement your configuration classes and settings here.
+"""
+
+from pydantic import BaseModel
+
+
+class AppConfig(BaseModel):
+    """The main application configuration class."""
+    pass
+
+
+# Global configuration instance
+config = AppConfig()
+{% endif -%}

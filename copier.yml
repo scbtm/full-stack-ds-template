@@ -1,0 +1,85 @@
+# MLOps Template Blueprint - Copier Configuration
+_min_copier_version: "9.0.0"
+_subdirectory: template
+
+# Template metadata
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+  comment_start_string: "{#"
+  comment_end_string: "#}"
+
+# Template questions and variables
+project_slug:
+  type: str
+  help: "Repository/Docker image name (kebab-case, e.g., 'my-ml-project')"
+  validator: "{% if not project_slug.replace('-', '').replace('_', '').isalnum() %}Invalid project slug. Use only letters, numbers, hyphens, and underscores.{% endif %}"
+
+package_name:
+  type: str
+  help: "Python package name under src/ (snake_case, e.g., 'my_ml_project')"
+  default: "{{ project_slug.replace('-', '_') }}"
+  validator: "{% if not package_name.replace('_', '').isalnum() %}Invalid package name. Use only letters, numbers, and underscores.{% endif %}"
+
+org_name:
+  type: str
+  help: "Organization/Weights & Biases entity name"
+  default: "your-org"
+
+include_sample_code:
+  type: str
+  help: "Include sample code in the template?"
+  choices:
+    - minimal
+    - starter
+  default: starter
+
+include_feature_engineering:
+  type: bool
+  help: "Include Hamilton-based feature engineering pipeline?"
+  default: true
+
+ci_provider:
+  type: str
+  help: "CI provider to use"
+  choices:
+    - github_actions
+    - none
+  default: github_actions
+
+cloud_provider:
+  type: str
+  help: "Cloud provider for deployment"
+  choices:
+    - gcp
+    - none
+  default: gcp
+
+include_monitoring:
+  type: bool
+  help: "Include model monitoring pipeline with drift detection?"
+  default: true
+
+api_framework:
+  type: str
+  help: "API framework for inference service"
+  choices:
+    - fastapi
+    - none
+  default: fastapi
+
+# Computed variables
+python_version:
+  type: str
+  default: "3.12"
+
+# Files to exclude based on configuration
+_skip_if_exists:
+  - "*.py"
+
+_tasks:
+  - command: "echo 'Template generated successfully! Run make install to get started.'"
+    when: true

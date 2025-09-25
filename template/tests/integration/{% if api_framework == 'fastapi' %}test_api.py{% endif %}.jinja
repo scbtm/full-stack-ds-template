@@ -1,0 +1,56 @@
+{% if api_framework == "fastapi" -%}
+{% if include_sample_code == "starter" -%}
+import pytest
+from fastapi.testclient import TestClient
+from {{ package_name }}.inference.main import app
+
+client = TestClient(app)
+
+
+def test_read_root():
+    """Tests the root endpoint."""
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"status": "API is running"}
+
+
+@pytest.mark.slow
+def test_predict_endpoint():
+    """
+    Tests the /predict endpoint.
+    In starter mode without a trained model, we expect a 200 with empty predictions.
+    """
+    resp = client.post("/predict", json={"instances": [[1.0, 2.0], [3.0, 4.0]]})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "predictions" in data
+    assert isinstance(data["predictions"], list)
+{% else -%}
+"""
+Integration tests for {{ package_name }} API.
+
+TODO(template): Add more comprehensive API integration tests.
+"""
+
+import pytest
+from fastapi.testclient import TestClient
+from {{ package_name }}.inference.main import app
+
+client = TestClient(app)
+
+
+def test_read_root():
+    """Test the root endpoint."""
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"status": "API is running"}
+
+
+def test_predict_endpoint():
+    """Test the predict endpoint."""
+    resp = client.post("/predict", json={"instances": []})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "predictions" in data
+{% endif -%}
+{% endif -%}
