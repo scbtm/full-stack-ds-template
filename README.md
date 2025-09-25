@@ -23,7 +23,7 @@ pip install copier
 
    Or if using locally:
    ```bash
-   copier copy . /path/to/new/project
+   copier copy . /path/to/new/project --trust
    ```
 
 2. **Answer the prompts** to customize your project:
