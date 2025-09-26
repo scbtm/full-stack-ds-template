@@ -26,7 +26,7 @@ After completion, use 'uv run make verify' to test your setup.
 # FILE SYSTEM UTILITIES
 # ============================================================================
 
-def run_command(cmd: list[str], description: str, timeout: int = 120) -> subprocess.CompletedProcess:
+def run_command(cmd: list[str], description: str, timeout: int = 360) -> subprocess.CompletedProcess:
     """
     Run a command with proper error handling and informative output.
 
@@ -131,8 +131,6 @@ def create_project_structure() -> list[Path]:
         ".",
         project_slug,
         "--trust",
-        "--data", f"package_name={package_name}",
-        "--data", f"project_name={project_slug.replace('_', ' ').title()}",
         ], "initialize project structure with Copier")
     created_files.append(Path(package_name))
 
