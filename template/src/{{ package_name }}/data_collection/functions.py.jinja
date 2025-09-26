@@ -1,0 +1,61 @@
+# TEMPLATE PLACEHOLDER:
+# Core data collection functions.
+
+import pandas as pd
+from {{ package_name }}.config import config
+
+
+def load_sample_data() -> pd.DataFrame:
+    """
+    Load sample data for demonstration purposes.
+
+    Returns:
+        Sample DataFrame with basic structure.
+    """
+    # TODO(template): Replace with your actual data loading logic
+    data = pd.DataFrame({
+        'feature_1': [1.0, 2.0, 3.0, 4.0, 5.0],
+        'feature_2': [0.1, 0.2, 0.3, 0.4, 0.5],
+        'target': [0, 1, 0, 1, 0]
+    })
+    return data
+
+
+def save_raw_data(data: pd.DataFrame) -> str:
+    """
+    Save raw data to configured path.
+
+    Args:
+        data: The DataFrame to save.
+
+    Returns:
+        Path where data was saved.
+    """
+    # TODO(template): Implement proper data saving logic
+    output_path = config.raw_data_path
+    print(f"Saving data to: {output_path}")
+    # In a real implementation, you would save the data:
+    # data.to_csv(output_path, index=False)
+    return output_path
+
+
+def validate_data_quality(data: pd.DataFrame) -> bool:
+    """
+    Perform basic data quality checks.
+
+    Args:
+        data: DataFrame to validate.
+
+    Returns:
+        True if data passes quality checks.
+    """
+    # TODO(template): Implement your data quality checks
+    if data.empty:
+        return False
+
+    # Check for minimum number of rows
+    if len(data) < 1:
+        return False
+
+    print(f"Data quality check passed: {len(data)} rows, {len(data.columns)} columns")
+    return True

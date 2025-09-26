@@ -1,30 +1,46 @@
 # TEMPLATE PLACEHOLDER:
-# Minimal Metaflow pipeline for data collection.
+# Metaflow pipeline for data collection orchestration.
 
 from metaflow import FlowSpec, step
+from {{ package_name }}.data_collection.steps import (
+    setup_data_collection_environment,
+    collect_and_validate_data
+)
 
 
 class DataCollectionFlow(FlowSpec):
-    """A simple Metaflow pipeline for data collection."""
+    """Metaflow pipeline for orchestrating data collection tasks."""
 
     @step
     def start(self):
+        """Initialize the data collection flow."""
         print("Starting data collection flow...")
-        self.next(self.load_data)
+        self.next(self.setup_environment)
 
     @step
-    def load_data(self):
-        print("Loading data...")
-        # TODO(template): Add your data loading logic here
+    def setup_environment(self):
+        """Set up data collection environment and configuration."""
+        self.env_config = setup_data_collection_environment()
+        print(f"Environment setup completed: {self.env_config['status']}")
+        self.next(self.collect_data)
+
+    @step
+    def collect_data(self):
+        """Execute data collection and validation."""
+        self.data_path = collect_and_validate_data()
+        print(f"Data collection completed: {self.data_path}")
         self.next(self.end)
 
     @step
     def end(self):
-        print("Data collection flow finished.")
+        """Complete the data collection flow."""
+        print("Data collection flow finished successfully.")
+        print(f"Final output: {self.data_path}")
 
 
 def main():
-    DataCollectionFlow()  # Triggers Metaflow CLI
+    """Entry point for the data collection flow."""
+    DataCollectionFlow()
 
 
 if __name__ == "__main__":

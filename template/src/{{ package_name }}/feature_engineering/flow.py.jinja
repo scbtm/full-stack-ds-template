@@ -1,14 +1,52 @@
 # TEMPLATE PLACEHOLDER:
-# Hamilton-based feature engineering pipeline.
+# Metaflow pipeline for feature engineering orchestration using Hamilton.
 
-from hamilton import base, driver
-from hamilton.execution import executors
+from metaflow import FlowSpec, step
+from {{ package_name }}.feature_engineering.steps import (
+    build_hamilton_driver,
+    validate_feature_pipeline,
+    execute_feature_pipeline
+)
+
+
+class FeatureEngineeringFlow(FlowSpec):
+    """Metaflow pipeline for orchestrating Hamilton-based feature engineering."""
+
+    @step
+    def start(self):
+        """Initialize the feature engineering flow."""
+        print("Starting feature engineering flow...")
+        self.next(self.validate_pipeline)
+
+    @step
+    def validate_pipeline(self):
+        """Validate that the Hamilton pipeline works correctly."""
+        self.validation_results = validate_feature_pipeline()
+
+        if not self.validation_results['pipeline_valid']:
+            raise RuntimeError(f"Pipeline validation failed: {self.validation_results.get('error')}")
+
+        print(f"Pipeline validation passed: {self.validation_results}")
+        self.next(self.build_features)
+
+    @step
+    def build_features(self):
+        """Execute the Hamilton feature engineering pipeline."""
+        self.features_path = execute_feature_pipeline()
+        print(f"Feature engineering completed: {self.features_path}")
+        self.next(self.end)
+
+    @step
+    def end(self):
+        """Complete the feature engineering flow."""
+        print("Feature engineering flow finished successfully.")
+        print(f"Final features output: {self.features_path}")
+        print(f"Validation summary: {self.validation_results}")
+
 
 def main():
-    """Main entry point for feature engineering pipeline."""
-    # TODO(template): Implement your Hamilton feature engineering pipeline here
-    print("Feature engineering pipeline placeholder - implement your Hamilton DAG here")
-    return 0
+    """Entry point for the feature engineering flow."""
+    FeatureEngineeringFlow()
 
 
 if __name__ == "__main__":

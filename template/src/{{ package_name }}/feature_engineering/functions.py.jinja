@@ -1,0 +1,93 @@
+# TEMPLATE PLACEHOLDER:
+# Core feature engineering functions using Hamilton.
+
+import pandas as pd
+import numpy as np
+from typing import Dict, Any
+
+
+def raw_data(data_path: str) -> pd.DataFrame:
+    """
+    Hamilton function to load raw data.
+
+    Args:
+        data_path: Path to the raw data file.
+
+    Returns:
+        Raw DataFrame.
+    """
+    # TODO(template): Implement actual data loading
+    # For now, return sample data
+    return pd.DataFrame({
+        'feature_1': [1.0, 2.0, 3.0, 4.0, 5.0],
+        'feature_2': [0.1, 0.2, 0.3, 0.4, 0.5],
+        'target': [0, 1, 0, 1, 0]
+    })
+
+
+def feature_1_scaled(raw_data: pd.DataFrame) -> pd.Series:
+    """
+    Hamilton function to scale feature_1.
+
+    Args:
+        raw_data: Input DataFrame.
+
+    Returns:
+        Scaled feature_1.
+    """
+    # TODO(template): Implement proper scaling
+    return (raw_data['feature_1'] - raw_data['feature_1'].mean()) / raw_data['feature_1'].std()
+
+
+def feature_2_log(raw_data: pd.DataFrame) -> pd.Series:
+    """
+    Hamilton function to apply log transformation to feature_2.
+
+    Args:
+        raw_data: Input DataFrame.
+
+    Returns:
+        Log-transformed feature_2.
+    """
+    # TODO(template): Implement proper log transformation with safety checks
+    return np.log1p(raw_data['feature_2'])
+
+
+def feature_interaction(feature_1_scaled: pd.Series, feature_2_log: pd.Series) -> pd.Series:
+    """
+    Hamilton function to create interaction feature.
+
+    Args:
+        feature_1_scaled: Scaled feature_1.
+        feature_2_log: Log-transformed feature_2.
+
+    Returns:
+        Interaction feature.
+    """
+    return feature_1_scaled * feature_2_log
+
+
+def final_features(
+    raw_data: pd.DataFrame,
+    feature_1_scaled: pd.Series,
+    feature_2_log: pd.Series,
+    feature_interaction: pd.Series
+) -> pd.DataFrame:
+    """
+    Hamilton function to combine all features into final dataset.
+
+    Args:
+        raw_data: Original data for target.
+        feature_1_scaled: Processed feature 1.
+        feature_2_log: Processed feature 2.
+        feature_interaction: Interaction feature.
+
+    Returns:
+        Final feature DataFrame.
+    """
+    return pd.DataFrame({
+        'feature_1_scaled': feature_1_scaled,
+        'feature_2_log': feature_2_log,
+        'feature_interaction': feature_interaction,
+        'target': raw_data['target']
+    })

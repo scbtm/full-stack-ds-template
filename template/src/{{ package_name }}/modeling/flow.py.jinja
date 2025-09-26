@@ -1,29 +1,53 @@
 # TEMPLATE PLACEHOLDER:
-# Metaflow training pipeline.
+# Metaflow pipeline for model training orchestration.
 
 from metaflow import FlowSpec, step
+from {{ package_name }}.modeling.steps import (
+    train_and_evaluate_model,
+    validate_model_performance
+)
 
 
 class TrainingFlow(FlowSpec):
-    """A generic Metaflow pipeline for model training."""
+    """Metaflow pipeline for orchestrating model training tasks."""
 
     @step
     def start(self):
+        """Initialize the model training flow."""
         print("Starting model training flow...")
         self.next(self.train_model)
 
     @step
     def train_model(self):
-        print("Training model...")
-        # TODO(template): Add your training logic here
+        """Execute model training, evaluation, and saving."""
+        self.training_results = train_and_evaluate_model()
+        print(f"Model training completed with accuracy: {self.training_results['metrics']['accuracy']:.3f}")
+        self.next(self.validate_performance)
+
+    @step
+    def validate_performance(self):
+        """Validate that model meets performance requirements."""
+        self.validation_results = validate_model_performance(metrics_threshold=0.5)
+
+        if not self.validation_results['performance_valid']:
+            print(f"⚠️  Model performance below threshold: {self.validation_results['accuracy']:.3f}")
+            # In production, you might want to fail the flow or trigger retraining
+            # For now, we'll continue but log the warning
+
+        print(f"Performance validation: {self.validation_results}")
         self.next(self.end)
 
     @step
     def end(self):
-        print("Model training flow finished.")
+        """Complete the model training flow."""
+        print("Model training flow finished successfully.")
+        print(f"Model saved to: {self.training_results['model_path']}")
+        print(f"Final accuracy: {self.training_results['metrics']['accuracy']:.3f}")
+        print(f"Performance validation: {'PASSED' if self.validation_results['performance_valid'] else 'FAILED'}")
 
 
 def main():
+    """Entry point for the model training flow."""
     TrainingFlow()
 
 

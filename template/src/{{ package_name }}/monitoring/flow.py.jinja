@@ -1,11 +1,56 @@
 # TEMPLATE PLACEHOLDER:
-# Model monitoring pipeline with drift detection.
+# Metaflow pipeline for model monitoring orchestration.
+
+from metaflow import FlowSpec, step
+from {{ package_name }}.monitoring.steps import (
+    run_drift_detection,
+    setup_monitoring_alerts,
+    generate_monitoring_report
+)
+
+
+class MonitoringFlow(FlowSpec):
+    """Metaflow pipeline for orchestrating model monitoring and drift detection."""
+
+    @step
+    def start(self):
+        """Initialize the monitoring flow."""
+        print("Starting model monitoring flow...")
+        self.next(self.detect_drift)
+
+    @step
+    def detect_drift(self):
+        """Execute drift detection analysis."""
+        self.drift_results = run_drift_detection(drift_threshold=0.5)
+        print(f"Drift detection completed: {'DRIFT DETECTED' if self.drift_results['drift_detected'] else 'NO DRIFT'}")
+        self.next(self.setup_alerts)
+
+    @step
+    def setup_alerts(self):
+        """Configure monitoring alerts based on drift detection."""
+        self.alert_config = setup_monitoring_alerts(self.drift_results)
+        print(f"Alert setup: {'ALERTS TRIGGERED' if self.alert_config['alert_triggered'] else 'NO ALERTS'}")
+        self.next(self.generate_report)
+
+    @step
+    def generate_report(self):
+        """Generate comprehensive monitoring report."""
+        self.monitoring_report = generate_monitoring_report(self.drift_results)
+        print(f"Monitoring report generated for {self.monitoring_report['total_features_monitored']} features")
+        self.next(self.end)
+
+    @step
+    def end(self):
+        """Complete the monitoring flow."""
+        print("Model monitoring flow finished successfully.")
+        print(f"Drift status: {'DETECTED' if self.drift_results['drift_detected'] else 'NOT DETECTED'}")
+        print(f"Max drift score: {self.monitoring_report['max_drift_score']:.3f}")
+        print(f"Alert status: {'TRIGGERED' if self.alert_config['alert_triggered'] else 'NONE'}")
+
 
 def main():
-    """Main entry point for monitoring pipeline."""
-    # TODO(template): Implement your model monitoring and drift detection here
-    print("Model monitoring pipeline placeholder - implement your drift detection here")
-    return 0
+    """Entry point for the monitoring flow."""
+    MonitoringFlow()
 
 
 if __name__ == "__main__":

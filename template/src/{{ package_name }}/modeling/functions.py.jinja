@@ -1,0 +1,115 @@
+# TEMPLATE PLACEHOLDER:
+# Core modeling functions.
+
+import pandas as pd
+import pickle
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+from typing import Tuple, Dict, Any
+from {{ package_name }}.config import config
+
+
+def load_features(features_path: str) -> pd.DataFrame:
+    """
+    Load processed features from storage.
+
+    Args:
+        features_path: Path to the features file.
+
+    Returns:
+        Features DataFrame.
+    """
+    # TODO(template): Implement actual feature loading
+    # For now, return sample data
+    return pd.DataFrame({
+        'feature_1_scaled': [-1.41, -0.71, 0.0, 0.71, 1.41],
+        'feature_2_log': [0.095, 0.182, 0.262, 0.336, 0.405],
+        'feature_interaction': [-0.134, -0.129, 0.0, 0.239, 0.571],
+        'target': [0, 1, 0, 1, 0]
+    })
+
+
+def prepare_train_test_split(
+    features: pd.DataFrame,
+    target_column: str = "target",
+    test_size: float = 0.2,
+    random_state: int = 42
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    """
+    Split features into train/test sets.
+
+    Args:
+        features: Input features DataFrame.
+        target_column: Name of target column.
+        test_size: Fraction of data for testing.
+        random_state: Random seed.
+
+    Returns:
+        X_train, X_test, y_train, y_test
+    """
+    X = features.drop(columns=[target_column])
+    y = features[target_column]
+
+    return train_test_split(X, y, test_size=test_size, random_state=random_state)
+
+
+def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> RandomForestClassifier:
+    """
+    Train a machine learning model.
+
+    Args:
+        X_train: Training features.
+        y_train: Training target.
+
+    Returns:
+        Trained model.
+    """
+    # TODO(template): Replace with your preferred model and hyperparameters
+    model = RandomForestClassifier(
+        n_estimators=100,
+        random_state=42,
+        max_depth=5
+    )
+    model.fit(X_train, y_train)
+    return model
+
+
+def evaluate_model(model: Any, X_test: pd.DataFrame, y_test: pd.Series) -> Dict[str, Any]:
+    """
+    Evaluate model performance.
+
+    Args:
+        model: Trained model.
+        X_test: Test features.
+        y_test: Test target.
+
+    Returns:
+        Evaluation metrics.
+    """
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+
+    return {
+        'accuracy': accuracy,
+        'classification_report': classification_report(y_test, y_pred, output_dict=True)
+    }
+
+
+def save_model(model: Any, model_path: str) -> str:
+    """
+    Save trained model to storage.
+
+    Args:
+        model: Trained model to save.
+        model_path: Path where to save the model.
+
+    Returns:
+        Path where model was saved.
+    """
+    # TODO(template): Implement proper model saving logic
+    print(f"Saving model to: {model_path}")
+    # In a real implementation:
+    # with open(model_path, 'wb') as f:
+    #     pickle.dump(model, f)
+    return model_path

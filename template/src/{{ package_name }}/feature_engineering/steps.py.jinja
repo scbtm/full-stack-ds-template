@@ -1,0 +1,91 @@
+# TEMPLATE PLACEHOLDER:
+# Logical steps that orchestrate Hamilton functions for feature engineering.
+
+from hamilton import driver
+from hamilton.execution import executors
+from {{ package_name }}.feature_engineering import functions
+from {{ package_name }}.config import config
+
+
+def build_hamilton_driver():
+    """
+    Create and configure Hamilton driver.
+
+    Returns:
+        Configured Hamilton driver.
+    """
+    print("Building Hamilton driver...")
+
+    # TODO(template): Configure Hamilton with your preferred executor
+    dr = driver.Builder().with_modules(functions).build()
+
+    return dr
+
+
+def execute_feature_pipeline():
+    """
+    Execute the complete feature engineering pipeline using Hamilton.
+
+    Returns:
+        Path to saved features.
+    """
+    print("Starting feature engineering step...")
+
+    # Build Hamilton driver
+    dr = build_hamilton_driver()
+
+    # Define what we want to compute
+    inputs = {
+        'data_path': config.raw_data_path
+    }
+
+    # Execute the Hamilton DAG
+    result = dr.execute(['final_features'], inputs=inputs)
+    features_df = result['final_features']
+
+    print(f"Generated features with shape: {features_df.shape}")
+
+    # TODO(template): Save features to configured path
+    output_path = config.features_path
+    print(f"Features would be saved to: {output_path}")
+    # features_df.to_parquet(output_path, index=False)
+
+    return output_path
+
+
+def validate_feature_pipeline():
+    """
+    Validate that the feature engineering pipeline works correctly.
+
+    Returns:
+        Validation results.
+    """
+    print("Validating feature engineering pipeline...")
+
+    # Build driver and test with minimal inputs
+    dr = build_hamilton_driver()
+
+    # Test the pipeline with sample inputs
+    test_inputs = {
+        'data_path': 'test_path'
+    }
+
+    try:
+        result = dr.execute(['final_features'], inputs=test_inputs)
+        features_df = result['final_features']
+
+        validation_results = {
+            'pipeline_valid': True,
+            'feature_count': len(features_df.columns),
+            'sample_count': len(features_df)
+        }
+
+        print(f"Pipeline validation passed: {features_df.shape}")
+        return validation_results
+
+    except Exception as e:
+        print(f"Pipeline validation failed: {str(e)}")
+        return {
+            'pipeline_valid': False,
+            'error': str(e)
+        }
