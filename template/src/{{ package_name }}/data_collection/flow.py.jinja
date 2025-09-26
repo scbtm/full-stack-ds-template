@@ -1,4 +1,3 @@
-{% if include_sample_code == "starter" -%}
 # TEMPLATE PLACEHOLDER:
 # Minimal Metaflow pipeline for data collection.
 
@@ -30,38 +29,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-{% else -%}
-"""
-Data collection Metaflow pipeline for {{ package_name }}.
-
-This module contains the Metaflow pipeline for data collection.
-TODO(template): Implement your data collection pipeline here.
-"""
-
-from metaflow import FlowSpec, step
-
-
-class DataCollectionFlow(FlowSpec):
-    """Metaflow pipeline for data collection."""
-
-    @step
-    def start(self):
-        """Start the data collection flow."""
-        print("Starting data collection flow...")
-        # TODO(template): Implement your flow logic here
-        self.next(self.end)
-
-    @step
-    def end(self):
-        """End the data collection flow."""
-        print("Data collection flow finished.")
-
-
-def main():
-    """Entry point for the data collection flow."""
-    DataCollectionFlow()
-
-
-if __name__ == "__main__":
-    main()
-{% endif -%}

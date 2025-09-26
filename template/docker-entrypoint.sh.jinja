@@ -5,39 +5,33 @@ set -e
 # Entry point that dispatches to API or pipelines based on ENTRYPOINT_COMMAND.
 # TODO(template): extend with more commands if needed.
 
-COMMAND=${ENTRYPOINT_COMMAND:-"{% if api_framework == 'fastapi' %}api{% else %}collect-data{% endif %}"}
+COMMAND=${ENTRYPOINT_COMMAND:-"api"}
 echo "Executing command: $COMMAND"
 
 case "$COMMAND" in
-{% if api_framework == "fastapi" -%}
   api)
     echo "Starting FastAPI server..."
     exec uv run gunicorn -w 4 -k uvicorn.workers.UvicornWorker {{ package_name }}.inference.main:app -b 0.0.0.0:8080
     ;;
-{% endif -%}
   train-model)
     echo "Running model training pipeline..."
     exec uv run train-model run
     ;;
-{% if include_feature_engineering -%}
   build-features)
     echo "Running feature engineering pipeline..."
     exec uv run build-features run
     ;;
-{% endif -%}
   collect-data)
     echo "Running data collection pipeline..."
     exec uv run collect-data run
     ;;
-{% if include_monitoring -%}
   monitor-model)
     echo "Running model monitoring pipeline..."
     exec uv run monitor-model run
     ;;
-{% endif -%}
   *)
     echo "Error: Unknown command '$COMMAND'"
-    echo "Available commands: {% if api_framework == 'fastapi' %}api, {% endif %}train-model{% if include_feature_engineering %}, build-features{% endif %}, collect-data{% if include_monitoring %}, monitor-model{% endif %}"
+    echo "Available commands: api, train-model, build-features, collect-data, monitor-model"
     exit 1
     ;;
 esac

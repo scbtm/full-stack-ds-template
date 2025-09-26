@@ -34,6 +34,31 @@ python_version:
   type: str
   default: "3.12"
 
+# Predetermined choices - no longer conditional
+include_sample_code:
+  type: str
+  default: "starter"
+
+include_feature_engineering:
+  type: bool
+  default: true
+
+ci_provider:
+  type: str
+  default: "github_actions"
+
+cloud_provider:
+  type: str
+  default: "gcp"
+
+include_monitoring:
+  type: bool
+  default: true
+
+api_framework:
+  type: str
+  default: "fastapi"
+
 # Files to exclude based on configuration
 _skip_if_exists:
   - "*.py"

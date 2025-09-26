@@ -53,25 +53,18 @@ Before running the pipelines, you may configure the following environment variab
 
 ## Usage
 
-This project ships with several Metaflow pipelines{% if api_framework == 'fastapi' %} and an API{% endif %}:
+This project ships with several Metaflow pipelines and an API:
 
 - **Collect Data**: `make collect-data`
-{% if include_feature_engineering -%}
 - **Build Features**: `make build-features`
-{% endif -%}
 - **Train Model**: `make train-model`
-{% if include_monitoring -%}
 - **Monitor Model**: `make monitor-model`
-{% endif -%}
 
-{% if api_framework == "fastapi" -%}
 To run the API locally:
 ```bash
 uv run api
 ```
-{% endif -%}
 
-{% if cloud_provider == "gcp" -%}
 ## CI/CD Pipeline
 
 This project uses a CI/CD pipeline with GitHub Actions and Google Cloud Build.
@@ -106,15 +99,11 @@ flowchart TB
 
     subgraph H[☁️ Google Cloud]
       direction TB
-      X[Single Image → Multiple Deployments] --> {% if api_framework == 'fastapi' %}I[🌐 API Service<br/>ENTRYPOINT_COMMAND=api]
-      X --> {% endif %}J[🤖 Training Job<br/>ENTRYPOINT_COMMAND=train-model]
+      X[Single Image → Multiple Deployments] --> I[🌐 API Service<br/>ENTRYPOINT_COMMAND=api]
+      X --> J[🤖 Training Job<br/>ENTRYPOINT_COMMAND=train-model]
       X --> K[📊 Data Collection Job<br/>ENTRYPOINT_COMMAND=collect-data]
-{% if include_feature_engineering -%}
       X --> L[⚙️ Feature Engineering Job<br/>ENTRYPOINT_COMMAND=build-features]
-{% endif -%}
-{% if include_monitoring -%}
       X --> M[📈 Model Monitoring Job<br/>ENTRYPOINT_COMMAND=monitor-model]
-{% endif -%}
     end
 
     classDef dev fill:#1d4ed8,stroke:#93c5fd,color:#f8fafc,stroke-width:2.5px;
@@ -134,9 +123,6 @@ flowchart TB
     class F image;
     class G registry;
     class H group;
-{% if api_framework == 'fastapi' -%}
     class I svc;
-{% endif -%}
-    class J,K{% if include_feature_engineering %},L{% endif %}{% if include_monitoring %},M{% endif %} job;
+    class J,K,L,M job;
 ```
-{% endif -%}

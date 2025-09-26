@@ -1,4 +1,3 @@
-{% if include_sample_code == "starter" -%}
 # TEMPLATE PLACEHOLDER:
 # Metaflow training pipeline.
 
@@ -30,38 +29,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-{% else -%}
-"""
-Modeling Metaflow pipeline for {{ package_name }}.
-
-This module contains the Metaflow pipeline for model training.
-TODO(template): Implement your modeling pipeline here.
-"""
-
-from metaflow import FlowSpec, step
-
-
-class TrainingFlow(FlowSpec):
-    """Metaflow pipeline for model training."""
-
-    @step
-    def start(self):
-        """Start the training flow."""
-        print("Starting model training flow...")
-        # TODO(template): Implement your flow logic here
-        self.next(self.end)
-
-    @step
-    def end(self):
-        """End the training flow."""
-        print("Model training flow finished.")
-
-
-def main():
-    """Entry point for the training flow."""
-    TrainingFlow()
-
-
-if __name__ == "__main__":
-    main()
-{% endif -%}

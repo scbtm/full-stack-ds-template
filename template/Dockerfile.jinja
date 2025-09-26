@@ -18,8 +18,4 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 COPY src/ ./src/
 ENTRYPOINT ["docker-entrypoint.sh"]
-{% if api_framework == "fastapi" -%}
 CMD ["api"]
-{% else -%}
-CMD ["collect-data"]
-{% endif -%}

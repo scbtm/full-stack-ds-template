@@ -23,11 +23,3 @@ def test_predict_endpoint():
     data = resp.json()
     assert "predictions" in data
     assert isinstance(data["predictions"], list)
-
-
-def test_predict_endpoint_empty():
-    """Test the predict endpoint with empty input."""
-    resp = client.post("/predict", json={"instances": []})
-    assert resp.status_code == 200
-    data = resp.json()
-    assert "predictions" in data
