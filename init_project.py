@@ -121,18 +121,20 @@ def create_project_structure() -> list[Path]:
     created_files: list[Path] = []
 
     # Project name derived from directory name
-    original_dir = Path.cwd().name.lower()
-    project_name = original_dir.replace("-", "_")
+    project_slug = Path.cwd().name.lower()
+    package_name = project_slug.replace("-", "_")
 
-    # Initialize UV project
+    # Initialize project, pass package_name to Copier as flag
     run_command([
         "copier",
         "copy",
         ".",
-        project_name,
-        "--trust"
+        project_slug,
+        "--trust",
+        "--data", f"package_name={package_name}",
+        "--data", f"project_name={project_slug.replace('_', ' ').title()}",
         ], "initialize project structure with Copier")
-    created_files.append(Path(project_name))
+    created_files.append(Path(package_name))
 
     return created_files
 
