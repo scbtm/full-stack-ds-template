@@ -66,26 +66,59 @@ _skip_if_exists:
 
 _tasks:
   - command: |
-      echo "Setting up your MLOps project..."
+      echo "Setting up your project..."
+
+      # Ensure PATH includes pipx installation location
+      export PATH="$HOME/.local/bin:$PATH"
+
+      # Check if uv is available
       if ! command -v uv >/dev/null 2>&1; then
         echo "Installing uv package manager..."
-        if command -v pipx >/dev/null 2>&1; then
-          pipx install uv
-        elif command -v pip >/dev/null 2>&1; then
-          pip install --user pipx
-          export PATH="$HOME/.local/bin:$PATH"
-          pipx install uv
-        else
-          echo "Installing uv via curl..."
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          export PATH="$HOME/.local/bin:$PATH"
+
+        # Check if pipx is available
+        if ! command -v pipx >/dev/null 2>&1; then
+          echo "Error: pipx is required to install uv."
+          echo "Please install pipx first:"
+          echo "  pip install --user pipx"
+          echo "  pipx ensurepath"
+          echo "Then run the template generation again."
+          exit 1
         fi
+
+        # Install uv via pipx
+        echo "Installing uv via pipx..."
+        if pipx install uv; then
+          echo "uv installed successfully via pipx"
+        else
+          echo "Error: Failed to install uv via pipx"
+          exit 1
+        fi
+      else
+        echo "uv is already available"
+      fi
+
+      # Verify uv is working
+      if command -v uv >/dev/null 2>&1; then
+        echo "uv version: $(uv --version)"
+      else
+        echo "Error: uv installation failed"
+        exit 1
       fi
     when: true
   - command: |
       echo "Installing project dependencies..."
+
+      # Ensure PATH includes pipx installation location
       export PATH="$HOME/.local/bin:$PATH"
-      uv sync --all-groups
+
+      # Install dependencies
+      if command -v uv >/dev/null 2>&1; then
+        uv sync --all-groups
+        echo "Dependencies installed successfully!"
+      else
+        echo "Error: uv not found. Please ensure uv is installed via pipx and run 'uv sync --all-groups'"
+        exit 1
+      fi
     when: true
   - command: "echo 'Template generated successfully! Run make verify to test your setup.'"
     when: true
