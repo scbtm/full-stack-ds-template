@@ -12,7 +12,7 @@ _envops:
   comment_start_string: "{#"
   comment_end_string: "#}"
 
-# Template questions and variables
+# User customization questions
 project_slug:
   type: str
   help: "Repository/Docker image name (kebab-case, e.g., 'my-ml-project')"
@@ -24,40 +24,41 @@ package_name:
   default: "{{ project_slug.replace('-', '_') }}"
   validator: "{% if not package_name.replace('_', '').isalnum() %}Invalid package name. Use only letters, numbers, and underscores.{% endif %}"
 
-org_name:
-  type: str
-  help: "Organization/Weights & Biases entity name"
-  default: "your-org"
-
-# Fixed variables - all features included by default
+# Fixed template configuration - not prompted to user
 python_version:
   type: str
   default: "3.12"
+  when: false
 
-# Predetermined choices - no longer conditional
 include_sample_code:
   type: str
   default: "starter"
+  when: false
 
 include_feature_engineering:
   type: bool
   default: true
+  when: false
 
 ci_provider:
   type: str
   default: "github_actions"
+  when: false
 
 cloud_provider:
   type: str
   default: "gcp"
+  when: false
 
 include_monitoring:
   type: bool
   default: true
+  when: false
 
 api_framework:
   type: str
   default: "fastapi"
+  when: false
 
 # Files to exclude based on configuration
 _skip_if_exists:

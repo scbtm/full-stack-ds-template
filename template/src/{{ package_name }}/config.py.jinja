@@ -42,7 +42,7 @@ class AppConfig(BaseModel):
 
     # W&B Configuration
     wandb_project: str = Field(default_factory=lambda: os.getenv("WANDB_PROJECT", "{{ project_slug }}"))
-    wandb_entity: str = Field(default_factory=lambda: os.getenv("WANDB_ENTITY", "{{ org_name }}"))
+    wandb_entity: str = Field(default_factory=lambda: os.getenv("WANDB_ENTITY", ""))
     wandb_key: str | None = Field(default_factory=lambda: os.getenv("WANDB_KEY"))
 
     # Model Name

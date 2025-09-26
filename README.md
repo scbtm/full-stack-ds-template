@@ -28,16 +28,11 @@ pip install copier
    copier copy . /path/to/new/project --trust
    ```
 
-2. **Answer the prompts** to customize your project:
+2. **Answer the simple setup prompts**:
    - **project_slug**: Repository/Docker image name (kebab-case, e.g., 'my-ml-project')
    - **package_name**: Python package name under src/ (snake_case, auto-generated from project_slug)
-   - **org_name**: Organization/Weights & Biases entity name
-   - **include_sample_code**: Choose between 'minimal' or 'starter' code
-   - **include_feature_engineering**: Include Hamilton-based feature engineering pipeline
-   - **ci_provider**: Choose CI provider (github_actions or none)
-   - **cloud_provider**: Choose cloud provider (gcp or none)
-   - **include_monitoring**: Include model monitoring pipeline with drift detection
-   - **api_framework**: Choose API framework (fastapi or none)
+
+   > **Note**: All MLOps features are included by default - no need to choose components!
 
 3. **Navigate to your new project** - dependencies are already installed!
    ```bash
