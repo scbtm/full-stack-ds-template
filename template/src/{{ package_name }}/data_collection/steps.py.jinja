@@ -3,7 +3,6 @@
 
 from {{ package_name }}.data_collection.functions import (
     load_sample_data,
-    save_raw_data,
     validate_data_quality
 )
 from {{ package_name }}.config import config
@@ -26,27 +25,4 @@ def collect_and_validate_data():
     if not validate_data_quality(data):
         raise ValueError("Data failed quality validation")
 
-    # Save the data
-    output_path = save_raw_data(data)
-    print(f"Data collection completed. Saved to: {output_path}")
-
-    return output_path
-
-
-def setup_data_collection_environment():
-    """
-    Set up necessary environment and configurations for data collection.
-
-    Returns:
-        Configuration dictionary.
-    """
-    print("Setting up data collection environment...")
-
-    # TODO(template): Add any environment setup logic
-    # This could include creating directories, checking permissions, etc.
-
-    return {
-        'base_data_path': config.base_data_path,
-        'raw_data_path': config.raw_data_path,
-        'status': 'ready'
-    }
+    return data

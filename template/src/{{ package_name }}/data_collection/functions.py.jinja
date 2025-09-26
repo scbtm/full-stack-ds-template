@@ -2,7 +2,6 @@
 # Core data collection functions.
 
 import pandas as pd
-from {{ package_name }}.config import config
 
 
 def load_sample_data() -> pd.DataFrame:
@@ -13,31 +12,14 @@ def load_sample_data() -> pd.DataFrame:
         Sample DataFrame with basic structure.
     """
     # TODO(template): Replace with your actual data loading logic
-    data = pd.DataFrame({
-        'feature_1': [1.0, 2.0, 3.0, 4.0, 5.0],
-        'feature_2': [0.1, 0.2, 0.3, 0.4, 0.5],
-        'target': [0, 1, 0, 1, 0]
-    })
+    data = pd.DataFrame(
+        {
+            "feature_1": [1.0, 2.0, 3.0, 4.0, 5.0],
+            "feature_2": [0.1, 0.2, 0.3, 0.4, 0.5],
+            "target": [0, 1, 0, 1, 0]
+        }
+    )
     return data
-
-
-def save_raw_data(data: pd.DataFrame) -> str:
-    """
-    Save raw data to configured path.
-
-    Args:
-        data: The DataFrame to save.
-
-    Returns:
-        Path where data was saved.
-    """
-    # TODO(template): Implement proper data saving logic
-    output_path = config.raw_data_path
-    print(f"Saving data to: {output_path}")
-    # In a real implementation, you would save the data:
-    # data.to_csv(output_path, index=False)
-    return output_path
-
 
 def validate_data_quality(data: pd.DataFrame) -> bool:
     """

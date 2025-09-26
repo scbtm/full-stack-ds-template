@@ -3,7 +3,6 @@
 
 import pandas as pd
 import pickle
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 from typing import Tuple, Dict, Any
@@ -21,7 +20,7 @@ def load_features(features_path: str) -> pd.DataFrame:
         Features DataFrame.
     """
     # TODO(template): Implement actual feature loading
-    # For now, return sample data
+    print(features_path)
     return pd.DataFrame({
         'feature_1_scaled': [-1.41, -0.71, 0.0, 0.71, 1.41],
         'feature_2_log': [0.095, 0.182, 0.262, 0.336, 0.405],
@@ -34,8 +33,7 @@ def prepare_train_test_split(
     features: pd.DataFrame,
     target_column: str = "target",
     test_size: float = 0.2,
-    random_state: int = 42
-) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]: # type: ignore
     """
     Split features into train/test sets.
 
@@ -48,10 +46,16 @@ def prepare_train_test_split(
     Returns:
         X_train, X_test, y_train, y_test
     """
-    X = features.drop(columns=[target_column])
-    y = features[target_column]
 
-    return train_test_split(X, y, test_size=test_size, random_state=random_state)
+    train_split = int((1-test_size) * len(features))
+
+    train = features[:train_split]
+    test = features[train_split:]
+
+    xtrain, ytrain = train.drop(target_column, axis = 1), train[target_column]
+    xtest, ytest = test.drop(target_column, axis = 1), test[target_column]
+
+    return xtrain, xtest, ytrain, ytest # type: ignore
 
 
 def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> RandomForestClassifier:
@@ -94,22 +98,3 @@ def evaluate_model(model: Any, X_test: pd.DataFrame, y_test: pd.Series) -> Dict[
         'accuracy': accuracy,
         'classification_report': classification_report(y_test, y_pred, output_dict=True)
     }
-
-
-def save_model(model: Any, model_path: str) -> str:
-    """
-    Save trained model to storage.
-
-    Args:
-        model: Trained model to save.
-        model_path: Path where to save the model.
-
-    Returns:
-        Path where model was saved.
-    """
-    # TODO(template): Implement proper model saving logic
-    print(f"Saving model to: {model_path}")
-    # In a real implementation:
-    # with open(model_path, 'wb') as f:
-    #     pickle.dump(model, f)
-    return model_path

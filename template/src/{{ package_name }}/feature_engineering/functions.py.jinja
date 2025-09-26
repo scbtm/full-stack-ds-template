@@ -17,7 +17,7 @@ def raw_data(data_path: str) -> pd.DataFrame:
         Raw DataFrame.
     """
     # TODO(template): Implement actual data loading
-    # For now, return sample data
+    print(data_path)
     return pd.DataFrame({
         'feature_1': [1.0, 2.0, 3.0, 4.0, 5.0],
         'feature_2': [0.1, 0.2, 0.3, 0.4, 0.5],
@@ -50,7 +50,11 @@ def feature_2_log(raw_data: pd.DataFrame) -> pd.Series:
         Log-transformed feature_2.
     """
     # TODO(template): Implement proper log transformation with safety checks
-    return np.log1p(raw_data['feature_2'])
+    return pd.Series(
+        raw_data['feature_2'].apply(lambda x: np.log1p(x)),
+        index=raw_data.index,
+        name='feature_2_log'
+        )
 
 
 def feature_interaction(feature_1_scaled: pd.Series, feature_2_log: pd.Series) -> pd.Series:

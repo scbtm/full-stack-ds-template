@@ -2,9 +2,9 @@
 # Metaflow pipeline for data collection orchestration.
 
 from metaflow import FlowSpec, step
+
 from {{ package_name }}.data_collection.steps import (
-    setup_data_collection_environment,
-    collect_and_validate_data
+    collect_and_validate_data,
 )
 
 
@@ -15,13 +15,6 @@ class DataCollectionFlow(FlowSpec):
     def start(self):
         """Initialize the data collection flow."""
         print("Starting data collection flow...")
-        self.next(self.setup_environment)
-
-    @step
-    def setup_environment(self):
-        """Set up data collection environment and configuration."""
-        self.env_config = setup_data_collection_environment()
-        print(f"Environment setup completed: {self.env_config['status']}")
         self.next(self.collect_data)
 
     @step
