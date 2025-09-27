@@ -272,13 +272,24 @@ def main():
         print("-" * 40)
 
         project_dir = created_files[0]
-        for item in project_dir.iterdir():
-            target = Path.cwd() / item.name
-            if target.exists():
-                print(f"⚠️  Conflict: {target} already exists. Skipping.")
-            else:
-                shutil.move(str(item), str(target))
-                print(f"   Moved {item.name} to current directory")
+        # Move all contents including hidden files
+        for item in project_dir.rglob("*"):
+            if item.is_file():
+                # Calculate relative path from project_dir
+                rel_path = item.relative_to(project_dir)
+                target = Path.cwd() / rel_path
+
+                # Ensure target directory exists
+                target.parent.mkdir(parents=True, exist_ok=True)
+
+                if target.exists():
+                    print(f"⚠️  Conflict: {target} already exists. Skipping.")
+                else:
+                    shutil.move(str(item), str(target))
+                    print(f"   Moved {rel_path} to current directory")
+
+        # Remove the now-empty project directory
+        safe_remove(project_dir, f"empty project directory: {project_dir.name}")
 
         # Success!
         display_success_message()
