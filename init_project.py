@@ -145,7 +145,7 @@ def create_project_structure() -> list[Path]:
 
 def cleanup_template_readme():
     """Remove template README if it hasn't been customized."""
-    readme = Path("README.md")
+    readme = Path("Template_README.md")
     if not readme.exists():
         return
 
