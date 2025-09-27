@@ -200,12 +200,6 @@ def cleanup_template_artifacts():
         for pycache in Path("src").rglob("__pycache__"):
             safe_remove(pycache, f"cache: {pycache}")
 
-    # Remove template README if it's still the original
-    cleanup_template_readme()
-
-    # Remove helper utilities (after this script finishes)
-    # Note: init_utils.py will be removed by the main cleanup
-
     # Remove this initialization script (final step)
     cleanup_initialization_script()
 
@@ -261,6 +255,10 @@ def main():
         # Phase 1: Copy from template
         print("\n🏗️  Phase 1: Building Project Structure")
         print("-" * 40)
+        
+        # Remove template README if it's still the original
+        cleanup_template_readme()
+
         created_files.extend(create_project_structure())
 
         # Phase 2: Cleanup
