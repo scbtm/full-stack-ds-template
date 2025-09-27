@@ -246,15 +246,6 @@ def verify_setup():
     print("   Sync dependencies...")
     run_command(["uv", "sync", "--all-groups"], "sync dependencies with UV")
 
-    print("   Checking critical dependencies...")
-    # Verify that key tools are available
-    try:
-        run_command(["uv", "run", "python", "-c", "import pyright"], "check pyright availability")
-        print("   ✓ Pyright is available")
-    except subprocess.CalledProcessError:
-        print("   ⚠️  Pyright not found, retrying dependency sync...")
-        run_command(["uv", "sync", "--all-groups", "--reinstall"], "reinstall dependencies")
-
     print("   Running verification checks...")
     run_command(["uv", "run", "make", "verify"], "verify project setup")
     print("✅ Verification complete!")
