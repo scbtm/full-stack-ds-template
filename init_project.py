@@ -247,6 +247,7 @@ def verify_setup():
     run_command(["uv", "sync", "--all-groups"], "sync dependencies with UV")
 
     print("   Running verification checks...")
+    run_command(["uv", "run", "pre-commit", "install"], "install pre-commit hooks")
     run_command(["uv", "run", "make", "verify"], "verify project setup")
     print("✅ Verification complete!")
 
