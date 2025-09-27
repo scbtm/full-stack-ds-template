@@ -243,6 +243,9 @@ def cleanup_template_artifacts():
 def verify_setup():
     """Run verification commands to ensure setup is correct."""
     print("🔍 Verifying project setup...")
+    print("   Sync dependencies...")
+    run_command(["uv", "sync", "--all-groups"], "sync dependencies with UV")
+    print("   Running verification checks...")
     run_command(["make", "verify"], "verify project setup")
     print("✅ Verification complete!")
 
