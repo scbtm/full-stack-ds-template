@@ -281,12 +281,8 @@ def main():
 
                 # Ensure target directory exists
                 target.parent.mkdir(parents=True, exist_ok=True)
-
-                if target.exists():
-                    print(f"⚠️  Conflict: {target} already exists. Skipping.")
-                else:
-                    shutil.move(str(item), str(target))
-                    print(f"   Moved {rel_path} to current directory")
+                
+                shutil.move(str(item), str(target))
 
         # Remove the now-empty project directory
         safe_remove(project_dir, f"empty project directory: {project_dir.name}")
