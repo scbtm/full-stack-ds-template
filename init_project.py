@@ -133,8 +133,13 @@ def create_project_structure() -> list[Path]:
         ".",
         project_slug,
         "--trust",
+        "--force",
+        "--d",
+        f"project_slug={project_slug}",
+        "--d",
+        f"package_name={package_name}",
         ], "initialize project structure with Copier")
-    created_files.append(Path(package_name))
+    created_files.append(Path(project_slug))
 
     return created_files
 
