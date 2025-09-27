@@ -151,7 +151,7 @@ def cleanup_template_readme():
 
     try:
         content = readme.read_text()
-        if "projects using Copier" in content:
+        if "using Copier" in content:
             safe_remove(readme, "template README.md")
             print("   💡 You can create a new README.md for your project")
     except Exception:

@@ -1,44 +1,58 @@
-# full-stack-ds-template
+# Full-Stack Data Science Template
 
-A comprehensive MLOps template for full-stack data science projects using Copier.
+🚀 A comprehensive DS / MLOps project template with modern tooling, CI/CD pipelines, and starter files using Copier.
 
-## Getting Started
+## ⚠️ Important: GitHub Template + Codespaces Only
 
-### Prerequisites
+**This repository is designed exclusively as a GitHub template for use in GitHub Codespaces.**
 
-- Python 3.8 or higher
-- [Copier](https://copier.readthedocs.io/) installed
+- 🎯 **Use the "Use this template" button** on GitHub to create your project
+- 💻 **Open in GitHub Codespaces** for automatic environment setup
+- 🚫 **Do not use Copier directly** - use the GitHub template workflow instead
 
-Install Copier:
+### Why This Approach?
+
+This template uses a **hybrid approach** combining GitHub templates with Copier + initialization script because:
+
+1. **GitHub Codespaces Integration**: Codespaces initializes with the main branch as root
+2. **Clean Project Structure**: The `init_project.py` script transforms the template into a proper project structure
+3. **Automated Setup**: Everything is configured automatically in the Codespaces environment
+4. **No Manual Configuration**: Dependencies, tools, and environment are pre-configured
+
+While it might seem redundant to use both Copier and an init script, this approach provides the cleanest development experience specifically for GitHub Codespaces users.
+
+## 🚀 Quick Start
+
+### 1. Create Your Project
+1. Click **"Use this template"** on GitHub
+2. Create your new repository
+3. Open in **GitHub Codespaces**
+
+### 2. Initialize Your Project
+Once in Codespaces, run the initialization script:
 ```bash
-pip install copier
+python init_project.py
 ```
 
-**Note**: Generated projects use `uv` for dependency management, which is automatically installed during project generation.
+This script will:
+- ✨ Create proper project structure using Copier
+- 🧹 Clean up template artifacts
+- 🔧 Set up development tools (Ruff, Pyright, pytest, pre-commit)
+- 📁 Move all files to the correct locations
+- 🗑️ Remove initialization files
 
-### Using the Template
+### 3. Verify Setup
+```bash
+uv run make verify
+```
 
-1. **Generate a new project** from this template:
-   ```bash
-   copier copy https://github.com/your-org/full-stack-ds-template.git /path/to/new/project
-   ```
+## 📋 Prerequisites
 
-   Or if using locally:
-   ```bash
-   copier copy . /path/to/new/project --trust
-   ```
+- **GitHub account** with Codespaces access
+- **Python 3.8+** (automatically available in Codespaces)
+- [Copier](https://copier.readthedocs.io/) installed
 
-2. **Answer the simple setup prompts**:
-   - **project_slug**: Repository/Docker image name (kebab-case, e.g., 'my-ml-project')
-   - **package_name**: Python package name under src/ (snake_case, auto-generated from project_slug)
-
-   > **Note**: All MLOps features are included by default - no need to choose components!
-
-3. **Navigate to your new project** - dependencies are already installed!
-   ```bash
-   cd /path/to/new/project
-   make verify  # Test that everything works
-   ```
+> **Note**: All dependencies and tools are automatically installed during the initialization process.
 
 ### Template Features
 
