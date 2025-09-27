@@ -46,10 +46,6 @@ class TrainingFlow(FlowSpec):
         print(f"Performance validation: {'PASSED' if self.validation_results['performance_valid'] else 'FAILED'}")
 
 
-def main():
+if __name__ == "__main__":
     """Entry point for the model training flow."""
     TrainingFlow()
-
-
-if __name__ == "__main__":
-    main()

@@ -48,10 +48,6 @@ class MonitoringFlow(FlowSpec):
         print(f"Alert status: {'TRIGGERED' if self.alert_config['alert_triggered'] else 'NONE'}")
 
 
-def main():
+if __name__ == "__main__":
     """Entry point for the monitoring flow."""
     MonitoringFlow()
-
-
-if __name__ == "__main__":
-    main()

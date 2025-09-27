@@ -6,17 +6,19 @@ readme = "README.md"
 requires-python = ">={{ python_version }}"
 dependencies = [
     "fastapi>=0.110.0",
-    "gunicorn>=21.2.0",
-    "uvicorn[standard]>=0.27.1",
-    "gcsfs>=2023.12.2",
-    "metaflow==2.11.5",
+    "gunicorn>=22.0.0",
+    "gcsfs>=2025.9.0",
+    "metaflow==2.18.1",
     "pandas>=2.2.0",
-    "polars>=0.20.10",
-    "pyarrow>=15.0.0",
-    "pydantic>=2.6.1",
-    "scikit-learn>=1.4.0",
-    "sf-hamilton[visualization]>=1.40.0",
-    "wandb>=0.16.3",
+    "polars>=1.32.3",
+    "pyarrow>=21.0.0",
+    "pydantic>=2.11.7",
+    "scikit-learn>=1.7.1",
+    "sf-hamilton[visualization]>=1.88.0",
+    "wandb>=0.21.3",
+    "nbformat>=5.10.4",
+    "optuna>=4.5.0",
+    "plotly>=5.22.0",
 ]
 
 [build-system]
@@ -25,23 +27,25 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
-    "ruff>=0.2.1",           # Linting and formatting
-    "pyright>=1.1.348",     # Type checking
-    "pytest>=8.0.0",        # Testing framework
-    "pytest-cov>=4.1.0",    # Coverage reporting
-    "coverage[toml]>=7.4.1", # Coverage configuration
-    "pre-commit>=3.6.0",    # Git hooks
-    "httpx>=0.26.0",        # HTTP client for API testing
-    "ipython>=8.21.0",      # Interactive Python
-    "pip-audit>=2.7.3",     # Security auditing
+    "ruff>=0.12.10",            # Linting and formatting
+    "pyright>=1.1.404",         # Type checking
+    "pytest>=8.0.0",            # Testing framework
+    "pytest-cov>=6.2.1",        # Coverage reporting
+    "coverage[toml]>=7.10.5",   # Coverage configuration
+    "pre-commit>=3.6.0",        # Git hooks
+    "httpx>=0.26.0",            # HTTP client for API testing
+    "ipython>=9.5.0",           # Interactive Python
+    "pip-audit>=2.7.3",         # Security auditing
+    "pre-commit>=4.3.0",
+    "sf-hamilton-lsp>=0.1.0",
 ]
 
 [project.scripts]
 api = "{{ package_name }}.inference.main:run"
-collect-data = "{{ package_name }}.data_collection.flow:main"
-build-features = "{{ package_name }}.feature_engineering.flow:main"
-train-model = "{{ package_name }}.modeling.flow:main"
-monitor-model = "{{ package_name }}.monitoring.flow:main"
+collect-data = "{{ package_name }}.data_collection.flow:DataCollectionFlow"
+build-features = "{{ package_name }}.feature_engineering.flow:FeatureEngineeringFlow"
+train-model = "{{ package_name }}.modeling.flow:TrainingFlow"
+monitor-model = "{{ package_name }}.monitoring.flow:MonitoringFlow"
 
 [tool.pytest.ini_options]
 markers = [
