@@ -74,18 +74,4 @@ _tasks:
         echo "Error: uv installation failed"
         exit 1
       fi
-  - command: |
-      echo "Installing project dependencies..."
-
-      # Ensure PATH includes pipx installation location
-      export PATH="$HOME/.local/bin:$PATH"
-
-      # Install dependencies
-      if command -v uv >/dev/null 2>&1; then
-        uv sync --all-groups
-        echo "Dependencies installed successfully!"
-      else
-        echo "Error: uv not found. Please ensure uv is installed via pipx and run 'uv sync --all-groups'"
-        exit 1
-      fi
-  - command: "echo 'Template generated successfully! Run make verify to test your setup.'"
+  - command: "echo 'Template generated successfully! Dependencies will be installed during initialization.'"
