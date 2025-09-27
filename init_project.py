@@ -2,6 +2,7 @@ import shutil
 import subprocess
 from pathlib import Path
 import sys
+from typing import Any
 
 """
 Data Science/MLOps Project Template Initializer
@@ -121,20 +122,41 @@ def ensure_directory_exists(path: Path) -> Path:
 # PROJECT INITIALIZATION LOGIC
 # ============================================================================
 
+
+def gather_project_information() -> dict[str, Any]:
+    """Gather essential project information from the user."""
+    print("📝 Gathering project information...")
+
+    # Project name derived from directory name
+    original_dir = Path.cwd().name.lower()
+    project_name = original_dir.replace("-", "_")
+
+    print(f"   Project name: {project_name}")
+
+    # Get Python version
+    python_version = input("   Python version [3.11]: ").strip() or "3.11"
+    print(f"   Using Python version: {python_version}")
+
+    return {
+        'project_name': project_name,
+        'python_version': python_version,
+        'original_dir': original_dir,
+    }
+
 def install_dependencies():
     """Install required dependencies using UV."""
     print("📦 Installing dependencies with UV...")
     run_command(["pipx", "install", "uv"], "install UV via pipx")
     run_command(["uv", "add", "copier"], "install Copier with UV")
 
-def create_project_structure() -> list[Path]:
+def create_project_structure(
+        project_slug: str,
+        package_name: str,
+        python_version: str = "3.11"
+        ) -> list[Path]:
     """Create the main project structure using Copier."""
     print("🏗️  Creating project structure...")
     created_files: list[Path] = []
-
-    # Project name derived from directory name
-    project_slug = Path.cwd().name.lower()
-    package_name = project_slug.replace("-", "_")
 
     # Initialize project, pass package_name to Copier as flag
     run_command([
@@ -144,6 +166,8 @@ def create_project_structure() -> list[Path]:
         project_slug,
         "--trust",
         "--force",
+        "--d",
+        f"python_version={python_version}",
         "--d",
         f"project_slug={project_slug}",
         "--d",
@@ -265,17 +289,31 @@ def main():
     """
     print("🚀 Full-Stack Data Science Project Template Initializer")
     print("=" * 50)
+    print()
+
+    project_info = gather_project_information()
+    project_slug = project_info['original_dir']
+    package_name = project_info['project_name']
+    python_version = project_info['python_version']
+
     print("Transforming template into your personalized ML project...")
     print()
 
     created_files: list[Path] = []  # Track files for potential rollback
 
     try:
+        # Install dependencies
+        install_dependencies()
+        created_files.append(Path(".venv"))  # Assume virtual env created
         # Phase 1: Copy from template
         print("\n🏗️  Phase 1: Building Project Structure")
         print("-" * 40)
         
-        created_files.extend(create_project_structure())
+        created_files.extend(create_project_structure(
+            project_slug=project_slug,
+            package_name=package_name,
+            python_version=python_version
+        ))
 
         # Phase 2: Cleanup
         print("\n🧹 Phase 2: Cleaning Up Template Files")
@@ -301,6 +339,11 @@ def main():
 
         # Remove the now-empty project directory
         safe_remove(project_dir, f"empty project directory: {project_dir.name}")
+
+        # Phase 4: Verification
+        print("\n🔍 Phase 4: Verifying Setup")
+        print("-" * 40)
+        verify_setup()
 
         # Success!
         display_success_message()
