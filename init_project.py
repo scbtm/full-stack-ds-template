@@ -47,9 +47,11 @@ def run_command(cmd: list[str], description: str, timeout: int = 360) -> subproc
         result = subprocess.run(
             cmd,
             check=True,
-            capture_output=True,
             text=True,
-            timeout=timeout
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            timeout=timeout,
         )
         return result
     except subprocess.CalledProcessError as e:
