@@ -246,7 +246,7 @@ def verify_setup():
     print("   Sync dependencies...")
     run_command(["uv", "sync", "--all-groups"], "sync dependencies with UV")
     print("   Running verification checks...")
-    run_command(["make", "verify"], "verify project setup")
+    run_command(["uv", "run", "make", "verify"], "verify project setup")
     print("✅ Verification complete!")
 
 def display_success_message():
