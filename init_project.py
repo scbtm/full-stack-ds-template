@@ -117,6 +117,16 @@ def ensure_directory_exists(path: Path) -> Path:
     path.mkdir(parents=True, exist_ok=True)
     return path
 
+# ============================================================================
+# PROJECT INITIALIZATION LOGIC
+# ============================================================================
+
+def install_dependencies():
+    """Install required dependencies using UV."""
+    print("📦 Installing dependencies with UV...")
+    run_command(["pipx", "install", "uv"], "install UV via pipx")
+    run_command(["uv", "add", "copier"], "install Copier with UV")
+
 def create_project_structure() -> list[Path]:
     """Create the main project structure using Copier."""
     print("🏗️  Creating project structure...")
@@ -206,6 +216,11 @@ def cleanup_template_artifacts():
     # Remove template README if it's still the original
     cleanup_template_readme()
 
+def verify_setup():
+    """Run verification commands to ensure setup is correct."""
+    print("🔍 Verifying project setup...")
+    run_command(["make", "verify"], "verify project setup")
+    print("✅ Verification complete!")
 
 def display_success_message():
     """Display success message with next steps."""
