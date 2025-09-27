@@ -179,7 +179,7 @@ def create_project_structure(
 
 def cleanup_template_readme():
     """Remove template README if it hasn't been customized."""
-    readme = Path("Template_README.md")
+    readme = Path("README.md")
     if not readme.exists():
         return
 
@@ -304,7 +304,6 @@ def main():
     try:
         # Install dependencies
         install_dependencies()
-        created_files.append(Path(".venv"))  # Assume virtual env created
         # Phase 1: Copy from template
         print("\n🏗️  Phase 1: Building Project Structure")
         print("-" * 40)
