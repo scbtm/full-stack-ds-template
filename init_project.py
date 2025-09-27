@@ -151,7 +151,7 @@ def cleanup_template_readme():
 
     try:
         content = readme.read_text()
-        if "MLops Project Template" in content:
+        if "projects using Copier" in content:
             safe_remove(readme, "template README.md")
             print("   💡 You can create a new README.md for your project")
     except Exception:
@@ -202,6 +202,10 @@ def cleanup_template_artifacts():
 
     # Remove this initialization script (final step)
     cleanup_initialization_script()
+
+    # Remove template README if it's still the original
+    cleanup_template_readme()
+
 
 def display_success_message():
     """Display success message with next steps."""
@@ -256,9 +260,6 @@ def main():
         print("\n🏗️  Phase 1: Building Project Structure")
         print("-" * 40)
         
-        # Remove template README if it's still the original
-        cleanup_template_readme()
-
         created_files.extend(create_project_structure())
 
         # Phase 2: Cleanup
