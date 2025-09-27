@@ -147,7 +147,7 @@ def install_dependencies():
     """Install required dependencies using UV."""
     print("📦 Installing dependencies with UV...")
     run_command(["pipx", "install", "uv"], "install UV via pipx")
-    run_command(["uv", "add", "copier"], "install Copier with UV")
+    run_command(["pipx", "install", "copier"], "install Copier with pipx")
 
 def create_project_structure(
         project_slug: str,
